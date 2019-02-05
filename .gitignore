@@ -1,0 +1,11 @@
+*.py[cod]
+
+# IDE - VSCode
+.vscode
+
+# Installer logs
+pip-log.txt
+
+__pycache__
+venv
+app.db
