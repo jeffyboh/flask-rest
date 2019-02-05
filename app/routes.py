@@ -23,3 +23,47 @@ def add_book():
     db.session.commit()
 
     return book_schema.jsonify(book)
+
+
+# Get single Book
+@app.route('/book/<id>', methods=['GET'])
+def get_book(id):
+    book = Book.query.get(id)
+    return book_schema.jsonify(book)
+
+
+# Get all Books
+@app.route('/book', methods=['GET'])
+def get_books():
+    books = Book.query.all()
+    result = books_schema.dump(books)
+    return jsonify(result.data)
+
+
+# Update a Book
+@app.route('/book/<id>', methods=['PUT'])
+def update_book(id):
+    book = Book.query.get(id)
+
+    title = request.json['title']
+    author = request.json['author']
+    genre = request.json['genre']
+    summary = request.json['summary']
+
+    book.title = title
+    book.author = author
+    book.genre = genre
+    book.summary = summary
+
+    db.session.commit()
+
+    return book_schema.jsonify(book)
+
+# Delete single Book
+@app.route('/book/<id>', methods=['DELETE'])
+def delete_book(id):
+    book = Book.query.get(id)
+    db.session.delete(book)
+    db.session.commit()
+
+    return book_schema.jsonify(book)
