@@ -1,5 +1,5 @@
-from app import app, db, ma
-from flask import request, jsonify
+from app import app, db, ma, handlers
+from flask import request, jsonify, abort
 from app.models import Book
 
 class BookSchema(ma.Schema):
@@ -22,7 +22,7 @@ def add_book():
     db.session.add(book)
     db.session.commit()
 
-    return book_schema.jsonify(book)
+    return book_schema.jsonify(book), 201
 
 
 # Get single Book
@@ -63,7 +63,9 @@ def update_book(id):
 @app.route('/book/<id>', methods=['DELETE'])
 def delete_book(id):
     book = Book.query.get(id)
+    if book == None:
+        abort(404)
     db.session.delete(book)
     db.session.commit()
 
-    return book_schema.jsonify(book)
+    return jsonify({'result': True})
